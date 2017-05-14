@@ -8,27 +8,27 @@ class JosephusProblemSpec extends FunSuite with Matchers {
 
   test("should hold for step 2") {
     val expectedSolutions = Seq(1, 1, 3, 1, 3, 5, 7, 1, 3, 5, 7, 9, 11, 13, 15, 1)
-    val actualSolutions = circleSizes.map(circleSize => JosephusProblem.survivorRecursively(circleSize, 2))
+    val actualSolutions = circleSizes.map(circleSize => JosephusProblem.survivor(circleSize, 2))
 
     actualSolutions shouldEqual expectedSolutions
   }
 
   test("should hold for step 3") {
     val expectedSolutions = Seq(1, 2, 2, 1, 4, 1, 4, 7, 1, 4, 7, 10, 13, 2, 5, 8)
-    val actualSolutions = circleSizes.map(circleSize => JosephusProblem.survivorRecursively(circleSize, 3))
+    val actualSolutions = circleSizes.map(circleSize => JosephusProblem.survivor(circleSize, 3))
 
     actualSolutions shouldEqual expectedSolutions
   }
 
   test("should hold for step 8") {
     val expectedSolutions = Seq(1, 1, 3, 3, 1, 3, 4, 4, 3, 1, 9, 5, 13, 7, 15, 7)
-    val actualSolutions = circleSizes.map(circleSize => JosephusProblem.survivorRecursively(circleSize, 8))
+    val actualSolutions = circleSizes.map(circleSize => JosephusProblem.survivor(circleSize, 8))
 
     actualSolutions shouldEqual expectedSolutions
   }
 
   test("what happens when circle size equals step") {
-    val actualSolutions = (2 to 30).map(circleSize => JosephusProblem.survivorRecursively(circleSize, circleSize))
+    val actualSolutions = (2 to 30).map(circleSize => JosephusProblem.survivor(circleSize, circleSize))
     println(actualSolutions.mkString(" "))
   }
 
@@ -36,7 +36,7 @@ class JosephusProblemSpec extends FunSuite with Matchers {
     val circleSize = 3
     val step = 2
 
-    JosephusProblem.survivorRecursively(circleSize, step) shouldEqual circleSize
+    JosephusProblem.survivor(circleSize, step) shouldEqual circleSize
   }
 
 }
