@@ -12,7 +12,7 @@ object JosephusProblem extends App {
   /**
     * @param n The number of people standing in the circle, waiting to be killed
     * @param k The position of the unfortunate one to be executed next
-    * @return  The lucky one
+    * @return  The position of the lucky one
     */
   def survivor(n: Int, k: Int): Int = {
     require(n > 0, s"expected: circle size > 0, was $n")
@@ -31,7 +31,7 @@ object JosephusProblem extends App {
     (1 to n).foldLeft(1)((r, c) => (r + k - 1) % c + 1)
 
   /**
-    * The special case for step=2 that optimizes the calculation to run in constant time (O(1))
+    * Special case for k=2 that optimizes the calculation to run in constant time (O(1))
     */
   private def specialCaseStepEquals2(n: Int): Int =
     2 * (n - Integer.highestOneBit(n)) + 1
