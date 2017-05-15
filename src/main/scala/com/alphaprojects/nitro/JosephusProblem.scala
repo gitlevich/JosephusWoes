@@ -27,7 +27,7 @@ object JosephusProblem extends App {
   /**
     * An iterative solution with runtime growing on the order of Q(n)
     */
-  def survivorIteratively(n: Int, k: Int): Int =
+  private def survivorIteratively(n: Int, k: Int): Int =
     (1 to n).foldLeft(1)((r, c) => (r + k - 1) % c + 1)
 
   /**
