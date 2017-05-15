@@ -10,48 +10,45 @@ object JosephusProblem extends App {
     s"the survivor will be in position ${survivor(circleSize, step)}")
 
   /**
-    * This method is here just to demonstrate that I am aware of the limitations of non-tail recursion,
-    * and to avoid stack overflow, it falls back to an iterative implementation when it decides, quite
-    * arbitrarily, that the circle size is too large for the recursive implementation.
-    *
-    * @param circleSize The number of people standing in the circle, waiting to be killed
-    * @param step How many people the evil executioner will skip when determining the next target
-    * @return The lucky one
+    * @param n The number of people standing in the circle, waiting to be killed
+    * @param k The position of the unfortunate one to be executed next
+    * @return  The lucky one
     */
-  def survivor(circleSize: Int, step: Int): Int = {
-    require(circleSize >= 1, s"expected: circle size >= 1, was $circleSize")
-    require(step > 1, s"expected: step > 1, was $step")
+  def survivor(n: Int, k: Int): Int = {
+    require(n > 0, s"expected: circle size > 0, was $n")
+    require(k > 0, s"expected: step > 0, was $k")
 
-    (circleSize, step) match {
-      case (_, 2) => survivorIterativelyStepEqualsTwoSpecialCase(circleSize)
-      case (c, _) if notVeryLarge(c) => survivorRecursively(circleSize, step)
-      case _ => survivorIteratively(circleSize, step)
+    (n, k) match {
+      case (_, 2) => specialCaseStepEquals2(n)
+      case _ => survivorIteratively(n, k)
     }
   }
 
   /**
-    * This method is here solely to show that I know what a recursion is. Unfortunately, I am not smart enough
-    * to implement it as a tail recursion, so this method will produce a stack overflow when the circle size
-    * is large enough (in my tests, greater than ~6500)
-    * It should perform in Q(n)
+    * An iterative solution with runtime growing on the order of Q(n)
+    * Can be used in place of the recursive solution (and looks simpler)
     */
-  private def survivorRecursively(circleSize: Int, step: Int): Int = circleSize match {
-    case 1 => 1
-    case _ => ((survivorRecursively(circleSize - 1, step) + step - 1) % circleSize) + 1
+  def survivorIteratively(n: Int, k: Int): Int =
+    (1 to n).foldLeft(1)((r, c) => (r + k - 1) % c + 1)
+
+  /**
+    * The special case for step=2 that optimizes the calculation to run in constant time (O(1))
+    */
+  private def specialCaseStepEquals2(n: Int): Int =
+    2 * (n - Integer.highestOneBit(n)) + 1
+
+
+  /**
+    * Recursive solution is here for illustration only: not being tail-recursive, this function
+    * will produce stack overflow when the circle size is too large (in my tests, > ~3500).
+    *
+    * Its runtime should grow on the order of the size of the input (Q(n))
+    */
+  def survivorRecursively(n: Int, k: Int): Int = {
+    n match {
+      case 1 => 1
+      case _ => ((survivorRecursively(n - 1, k) + k - 1) % n) + 1
+    }
   }
 
-  /**
-    * This is generally a preferred way to implement this solution as it will not cause a stack overflow.
-    * It will perform in Q(n)
-    */
-  private def survivorIteratively(circleSize: Int, step: Int): Int =
-    (1 to circleSize).foldLeft(1)((r, c) => (r + step - 1) % c + 1)
-
-  /**
-    * Finally, this is the special case for step=2 that makes calculation perform in O(1)
-    */
-  private def survivorIterativelyStepEqualsTwoSpecialCase(circleSize: Int): Int =
-    2 * (circleSize - Integer.highestOneBit(circleSize)) + 1
-
-  private def notVeryLarge(circleSize: Int): Boolean = circleSize < 3000
 }
